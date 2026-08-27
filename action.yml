@@ -1,0 +1,44 @@
+name: 'Datalumo Sync'
+description: 'Push Markdown and docs from this repository into a Datalumo knowledge source.'
+author: 'Datalumo'
+branding:
+  icon: book-open
+  color: orange
+
+inputs:
+  api_key:
+    description: 'Organisation API key with the pages.write permission.'
+    required: true
+  organisation:
+    description: 'Organisation public id (a UUID from the dashboard). Not the organisation slug.'
+    required: true
+  source:
+    description: 'API source slug or public id to push into.'
+    required: true
+  path:
+    description: 'Folder of docs to sync, relative to the workspace.'
+    required: false
+    default: 'docs'
+  base_url:
+    description: 'Public docs URL prefix used for citations, for example https://example.com/docs'
+    required: false
+    default: ''
+  api_url:
+    description: 'Datalumo origin. Change this only for a self-hosted install.'
+    required: false
+    default: 'https://datalumo.app'
+
+runs:
+  using: composite
+  steps:
+    - name: Sync docs to Datalumo
+      shell: bash
+      env:
+        DATALUMO_TOKEN: ${{ inputs.api_key }}
+        DATALUMO_ORG: ${{ inputs.organisation }}
+        DATALUMO_SOURCE: ${{ inputs.source }}
+        DATALUMO_PATH: ${{ inputs.path }}
+        DATALUMO_BASE_URL: ${{ inputs.base_url }}
+        DATALUMO_API_URL: ${{ inputs.api_url }}
+        DATALUMO_WORKSPACE: ${{ github.workspace }}
+      run: python3 "${{ github.action_path }}/sync.py"
