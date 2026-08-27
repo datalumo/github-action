@@ -2,7 +2,7 @@
 
 GitHub Action that pushes Markdown and docs from a repository into a [Datalumo](https://datalumo.app) knowledge source.
 
-Use it when your docs live in git. On push, the files are synced. Visitors get search and chat that stay on your content.
+Use it when your content live in git. On push, the files are synced. Visitors get search and chat that stay on your content.
 
 ## Use it
 
