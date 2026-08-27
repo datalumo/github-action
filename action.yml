@@ -1,8 +1,8 @@
 name: 'Datalumo Sync'
-description: 'Push Markdown and docs from this repository into a Datalumo knowledge source.'
+description: 'Push content from this repository into a Datalumo knowledge source.'
 author: 'Datalumo'
 branding:
-  icon: book-open
+  icon: repeat
   color: orange
 
 inputs:
