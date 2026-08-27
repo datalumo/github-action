@@ -7,7 +7,7 @@ branding:
 
 inputs:
   api_key:
-    description: 'Organisation API key with the pages.write permission.'
+    description: 'Organisation API key with pages.write and pages.read (read is used to prune removed files).'
     required: true
   organisation:
     description: 'Organisation public id (a UUID from the dashboard). Not the organisation slug.'

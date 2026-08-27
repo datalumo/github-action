@@ -2,12 +2,12 @@
 
 GitHub Action that pushes Markdown and docs from a repository into a [Datalumo](https://datalumo.app) knowledge source.
 
-Use it when your content live in git. On push, the files are synced. Visitors get search and chat that stay on your content.
+Use it when your content lives in git. On push, the files are synced. Visitors get search and chat that stay on your content.
 
 ## Use it
 
 1. In Datalumo, create a source of type **API**.
-2. Create an API key with `pages.write`. Limit it to that source if you can.
+2. Create an API key with `pages.write` and `pages.read`. Limit it to that source if you can. Read is used to prune pages whose files were removed.
 3. Copy your **organisation public id** (the UUID, not the slug).
 4. In the docs repo, add the secrets and this workflow.
 
@@ -35,13 +35,17 @@ jobs:
           base_url: https://example.com/docs
 ```
 
-`external_id` is the file path, so a later run updates the same pages instead of duplicating them.
+`external_id` is the path relative to `path`, without the file extension. `install.md` becomes `install`. Nested files keep their folders: `guides/install.md` becomes `guides/install`. A later run updates the same pages instead of duplicating them. Files that disappear from the folder are deleted from the source.
+
+Citation URLs are `{base_url}/{external_id}`, so `base_url: https://example.com/docs` plus `install.md` becomes `https://example.com/docs/install`.
+
+Pin `@v1` for compatible updates. Pin `@v1.0.0` if you need that exact release.
 
 ## Inputs
 
 | Input | Required | Default | What it is |
 |---|---|---|---|
-| `api_key` | yes | | Organisation API key with `pages.write` |
+| `api_key` | yes | | Organisation API key with `pages.write` and `pages.read` |
 | `organisation` | yes | | Organisation public id (UUID) |
 | `source` | yes | | API source slug or public id |
 | `path` | no | `docs` | Folder to sync, relative to the repo |
@@ -52,7 +56,9 @@ jobs:
 
 `.md`, `.mdx`, `.markdown`, `.html`, `.htm`, and `.txt`. It skips `.git`, `node_modules`, `vendor`, and `.github`.
 
-Title comes from the first `# heading`, or the file name. After a push, Datalumo indexes in the background. Watch the source page in the dashboard until it says Ready.
+Title comes from the first `# heading`, or the file name. After a push, the action kicks indexing. Watch the source page in the dashboard until it says Ready.
+
+An empty folder fails the job instead of wiping the source.
 
 ## Marketplace
 
